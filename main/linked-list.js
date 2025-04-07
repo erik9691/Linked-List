@@ -1,3 +1,5 @@
+export { LinkedList };
+
 class LinkedList {
 	constructor() {}
 
@@ -81,6 +83,66 @@ class LinkedList {
 		}
 		return false;
 	}
+	find(value) {
+		let currentNode = this.headNode;
+		for (let i = 0; i < this.length; i++) {
+			if (currentNode.value === value) {
+				return i;
+			}
+			currentNode = currentNode.nextNode;
+		}
+		return null;
+	}
+	toString() {
+		let outputString = "";
+		let currentNode = this.headNode;
+		for (let i = 0; i < this.length; i++) {
+			outputString += `( ${currentNode.value} ) -> `;
+			currentNode = currentNode.nextNode;
+		}
+		outputString += "null";
+		return outputString;
+	}
+	insertAt(value, index) {
+		if (index < 0) {
+			throw new Error("ERROR index must be 0 or higher");
+		} else if (index + 1 > this.length) {
+			throw new Error("ERROR index can't be larger than list");
+		} else if (index === 0) {
+			this.prepend(value);
+		} else if (index + 1 === this.length) {
+			this.append(value);
+		} else {
+			const newNode = new Node(value);
+			const previousNode = this.at(index - 1);
+			const nextNode = previousNode.nextNode;
+
+			previousNode.nextNode = newNode;
+			newNode.nextNode = nextNode;
+
+			this.length += 1;
+		}
+	}
+	removeAt(index) {
+		if (index < 0) {
+			throw new Error("ERROR index must be 0 or higher");
+		} else if (index + 1 > this.length) {
+			throw new Error("ERROR index can't be larger than list");
+		} else if (index === 0) {
+			const nextNode = this.at(index + 1);
+			this.headNode = nextNode;
+			this.length -= 1;
+		} else if (index + 1 === this.length) {
+			this.pop();
+		} else {
+			const previousNode = this.at(index - 1);
+			const nextNode = previousNode.nextNode.nextNode;
+
+			previousNode.nextNode = nextNode;
+
+			this.length -= 1;
+		}
+	}
 }
 
 class Node {
@@ -91,10 +153,3 @@ class Node {
 		this.value = value;
 	}
 }
-
-const list = new LinkedList();
-
-list.append("dude");
-list.append("bro");
-list.prepend("yes");
-list.pop();
